@@ -2,34 +2,27 @@ import { ChangeEvent, useState } from "react";
 import MusicPlayer from "./MusicPlayer";
 
 function MusicPannel() {
-  const [path, setPath] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
   return (
     <>
       <input
         type="file"
         onChange={(e: ChangeEvent) => {
-          handleInputChange(e, path, setPath);
+          handleInputChange(e, setFile);
         }}
       />
-      <div className="music-player">{path && <MusicPlayer path={path} />}</div>
+      {file && <MusicPlayer file={file} />}
     </>
   );
 }
 
 function handleInputChange(
   e: ChangeEvent,
-  path: string,
-  setPath: React.Dispatch<React.SetStateAction<string>>
+  setFile: React.Dispatch<React.SetStateAction<File | null>>
 ) {
-  window.URL.revokeObjectURL(path as string);
-  const url = getUrlFromChange(e);
-  setPath(url);
-}
-
-function getUrlFromChange(e: ChangeEvent): string {
   const target = e.target as HTMLInputElement;
   const file = (target.files as FileList)[0];
-  return window.URL.createObjectURL(file);
+  setFile(file);
 }
 
 export default MusicPannel;
