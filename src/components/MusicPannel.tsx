@@ -6,7 +6,7 @@ function MusicPannel() {
   const [url, setURL] = useState<string | null>(null);
   return (
     <>
-      <MusicInput handleChangeMusicURL={setURL} />
+      <MusicInput handleChangeMusic={setURL} />
       {url && <MusicPlayer url={url} />}
     </>
   );

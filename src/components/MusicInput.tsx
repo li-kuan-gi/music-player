@@ -1,36 +1,36 @@
 import { ChangeEvent, useState } from "react";
 
-function MusicInput(props: {
-  handleChangeMusicURL: React.Dispatch<React.SetStateAction<string | null>>;
-}) {
-  const handleInputChange = useChangeMusic(props.handleChangeMusicURL);
+function MusicInput(props: { handleChangeMusic: (url: string) => void }) {
+  const handleChangeMusic = useChangeMusic(props.handleChangeMusic);
 
-  return <input type="file" onChange={handleInputChange} />;
+  return <input type="file" onChange={handleChangeMusic} />;
 }
 
-function useChangeMusic(
-  handleChangeMusicURL: React.Dispatch<React.SetStateAction<string | null>>
-) {
+function useChangeMusic(handleChangeMusicURL: (url: string) => void) {
   const [previousURL, setPreviousURL] = useState<string | null>(null);
 
-  const handleInputChange = (e: ChangeEvent) => {
-    if (previousURL) {
-      window.URL.revokeObjectURL(previousURL);
-    }
-
+  const handleChangeMusic = (e: ChangeEvent) => {
     const url = getInputFileURL(e);
-
-    setPreviousURL(url);
-    handleChangeMusicURL(url);
+    if (url) {
+      if (previousURL) {
+        window.URL.revokeObjectURL(previousURL);
+      }
+      setPreviousURL(url);
+      handleChangeMusicURL(url);
+    }
   };
 
-  return handleInputChange;
+  return handleChangeMusic;
 }
 
-function getInputFileURL(e: ChangeEvent): string {
+function getInputFileURL(e: ChangeEvent): string | undefined {
   const fileInputElement = e.target as HTMLInputElement;
-  const file = (fileInputElement.files as FileList)[0];
-  return window.URL.createObjectURL(file);
+  const files = fileInputElement.files as FileList;
+  if (files.length > 0) {
+    return window.URL.createObjectURL(files[0]);
+  } else {
+    return undefined;
+  }
 }
 
 export default MusicInput;
