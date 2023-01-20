@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/music-player/static/js/main.887ca62b.js",
+    "main.js": "/music-player/static/js/main.9bb83482.js",
     "index.html": "/music-player/index.html",
-    "main.887ca62b.js.map": "/music-player/static/js/main.887ca62b.js.map"
+    "main.9bb83482.js.map": "/music-player/static/js/main.9bb83482.js.map"
   },
   "entrypoints": [
-    "static/js/main.887ca62b.js"
+    "static/js/main.9bb83482.js"
   ]
 }
