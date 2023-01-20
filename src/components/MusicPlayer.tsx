@@ -6,10 +6,24 @@ type Props = {
 };
 
 function MusicPlayer(props: Props) {
-  const { audioRef, isPlaying, togglePlayPause, handleEnded } = useMusic(props);
+  const {
+    audioRef,
+    isPlaying,
+    hasPlayed,
+    hasPaused,
+    togglePlayPause,
+    hasEnded,
+  } = useMusic(props);
+
   return (
     <div className="player">
-      <audio src={props.url} ref={audioRef} onEnded={handleEnded} />
+      <audio
+        src={props.url}
+        ref={audioRef}
+        onPlay={hasPlayed}
+        onPause={hasPaused}
+        onEnded={hasEnded}
+      />
       <PlayPauseButton
         isPlaying={isPlaying}
         togglePlayPause={togglePlayPause}
@@ -21,12 +35,13 @@ function MusicPlayer(props: Props) {
 function useMusic(props: Props) {
   const initPlaying = false;
 
-  const [isPlaying, setIsPlaying] = useState(initPlaying);
+  const [isPlaying, setPlaying] = useState(initPlaying);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // reset state when props change
   useEffect(() => {
-    setIsPlaying(initPlaying);
+    setPlaying(initPlaying);
+    // eslint-disable-next-line
   }, [props]);
 
   // imperatively control the audio
@@ -35,14 +50,29 @@ function useMusic(props: Props) {
   }, [isPlaying]);
 
   function togglePlayPause() {
-    setIsPlaying(!isPlaying);
+    setPlaying(!isPlaying);
   }
 
-  function handleEnded() {
-    setIsPlaying(false);
+  function hasEnded() {
+    setPlaying(false);
   }
 
-  return { audioRef, isPlaying, togglePlayPause, handleEnded };
+  function hasPlayed() {
+    setPlaying(true);
+  }
+
+  function hasPaused() {
+    setPlaying(false);
+  }
+
+  return {
+    audioRef,
+    isPlaying,
+    hasPlayed,
+    hasPaused,
+    togglePlayPause,
+    hasEnded,
+  };
 }
 
 export default MusicPlayer;
